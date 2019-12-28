@@ -1971,6 +1971,8 @@ pub enum OpaqueTyOrigin {
     FnReturn,
     /// `async fn`
     AsyncFn,
+    /// Impl trait in bindings, consts, statics, bounds.
+    Misc,
 }
 
 /// The various kinds of types recognized by the compiler.
