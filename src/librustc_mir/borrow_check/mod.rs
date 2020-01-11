@@ -1528,18 +1528,17 @@ impl<'cx, 'tcx> MirBorrowckCtxt<'cx, 'tcx> {
                         .buffer(&mut self.errors_buffer);
                 }
 
-                RegionErrorKind::UnexpectedHiddenRegion {
-                    opaque_type_def_id,
-                    hidden_ty,
-                    member_region,
-                } => {
+                RegionErrorKind::UnexpectedHiddenRegion { span, hidden_ty, member_region } => {
                     let region_scope_tree = &self.infcx.tcx.region_scope_tree(self.mir_def_id);
+                    let named_ty = self.nonlexical_regioncx.name_regions(self.infcx.tcx, hidden_ty);
+                    let named_region =
+                        self.nonlexical_regioncx.name_regions(self.infcx.tcx, member_region);
                     opaque_types::unexpected_hidden_region_diagnostic(
                         self.infcx.tcx,
                         Some(region_scope_tree),
-                        opaque_type_def_id,
-                        hidden_ty,
-                        member_region,
+                        span,
+                        named_ty,
+                        named_region,
                     )
                     .buffer(&mut self.errors_buffer);
                 }
