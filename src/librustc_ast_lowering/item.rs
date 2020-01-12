@@ -273,7 +273,7 @@ impl<'hir> LoweringContext<'_, 'hir> {
                 let ty = self.lower_ty(
                     t,
                     if self.sess.features_untracked().impl_trait_in_bindings {
-                        ImplTraitContext::OpaqueTy(None)
+                        ImplTraitContext::OpaqueTy(None, hir::OpaqueTyOrigin::Misc)
                     } else {
                         ImplTraitContext::Disallowed(ImplTraitPosition::Binding)
                     },
@@ -284,7 +284,7 @@ impl<'hir> LoweringContext<'_, 'hir> {
                 let ty = self.lower_ty(
                     t,
                     if self.sess.features_untracked().impl_trait_in_bindings {
-                        ImplTraitContext::OpaqueTy(None)
+                        ImplTraitContext::OpaqueTy(None, hir::OpaqueTyOrigin::Misc)
                     } else {
                         ImplTraitContext::Disallowed(ImplTraitPosition::Binding)
                     },
@@ -331,8 +331,14 @@ impl<'hir> LoweringContext<'_, 'hir> {
                 }
                 Some(bounds) => {
                     let ty = hir::OpaqueTy {
-                        generics: self.lower_generics(generics, ImplTraitContext::OpaqueTy(None)),
-                        bounds: self.lower_param_bounds(bounds, ImplTraitContext::OpaqueTy(None)),
+                        generics: self.lower_generics(
+                            generics,
+                            ImplTraitContext::OpaqueTy(None, hir::OpaqueTyOrigin::Misc),
+                        ),
+                        bounds: self.lower_param_bounds(
+                            bounds,
+                            ImplTraitContext::OpaqueTy(None, hir::OpaqueTyOrigin::Misc),
+                        ),
                         impl_trait_fn: None,
                         origin: hir::OpaqueTyOrigin::TypeAlias,
                     };

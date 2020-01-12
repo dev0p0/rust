@@ -1694,7 +1694,9 @@ impl RegionKind {
             ty::ReEmpty | ty::ReStatic | ty::ReFree { .. } | ty::ReScope { .. } => {
                 flags = flags | TypeFlags::HAS_FREE_REGIONS;
             }
-            ty::ReErased => {}
+            ty::ReErased => {
+                flags = flags | TypeFlags::HAS_RE_ERASED;
+            }
             ty::ReClosureBound(..) => {
                 flags = flags | TypeFlags::HAS_FREE_REGIONS;
             }
